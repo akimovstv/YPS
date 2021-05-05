@@ -1,3 +1,6 @@
+"""
+Handlers for `/course` and `/course/<int:course_id>`
+"""
 from typing import Any, Dict, Tuple
 
 from flask_restful import Resource, reqparse
@@ -17,8 +20,12 @@ class ExistedCourse(Resource):
     def patch(self, course_id: int):
         return f'patch course with id: {course_id}'
 
-    def delete(self, course_id: int):
-        return f'delete course with id: {course_id}'
+    def delete(self, course_id: int) -> Dict[str, str]:
+        """
+        Delete course with id `course_id` from database.
+        """
+        database.delete_course_by_id(course_id=course_id)
+        return {'message': f'Course with id {course_id} deleted'}
 
 
 class NewCourse(Resource):
