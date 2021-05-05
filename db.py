@@ -24,11 +24,11 @@ class Database:
             self,
             *,
             name: Optional[str] = None,
-            start_date: Optional[str] = None,
-            end_date: Optional[str] = None
+            start_date_after: Optional[str] = None,
+            end_date_before: Optional[str] = None
     ) -> Iterator[Row]:
         """
-        Select courses from database applying filtering by `name`, `start_date`, `end_date` if any.
+        Select courses from database applying filtering by `name`, `start_date_after`, `end_date_before` if any.
         """
         with connect(self._path) as connection:
             connection.row_factory = Row
@@ -43,53 +43,53 @@ class Database:
                     courses
             """
 
-            if name and start_date and end_date:
+            if name and start_date_after and end_date_before:
                 query += """
                     WHERE
                           Name = ?
-                      AND DATE(StartDate) <= DATE(?)
-                      AND DATE(EndDate) >= DATE(?)
+                      AND DATE(StartDate) >= DATE(?)
+                      AND DATE(EndDate) <= DATE(?)
                 """
-                parameters = (name, start_date, end_date)
-            elif name and start_date:
+                parameters = (name, start_date_after, end_date_before)
+            elif name and start_date_after:
                 query += """
                     WHERE
                           Name = ?
-                      AND DATE(StartDate) <= DATE(?)
+                      AND DATE(StartDate) >= DATE(?)
                 """
-                parameters = (name, start_date)
-            elif name and end_date:
+                parameters = (name, start_date_after)
+            elif name and end_date_before:
                 query += """
                     WHERE
                           Name = ?
-                      AND DATE(EndDate) >= DATE(?)
+                      AND DATE(EndDate) <= DATE(?)
                 """
-                parameters = (name, end_date)
+                parameters = (name, end_date_before)
             elif name:
                 query += """
                     WHERE
                           Name = ?
                 """
                 parameters = (name,)
-            elif start_date and end_date:
+            elif start_date_after and end_date_before:
                 query += """
                     WHERE
-                          DATE(StartDate) <= DATE(?)
-                      AND DATE(EndDate) >= DATE(?)
+                          DATE(StartDate) >= DATE(?)
+                      AND DATE(EndDate) <= DATE(?)
                 """
-                parameters = (start_date, end_date)
-            elif start_date:
+                parameters = (start_date_after, end_date_before)
+            elif start_date_after:
                 query += """
                     WHERE
-                          DATE(StartDate) <= DATE(?)
+                          DATE(StartDate) >= DATE(?)
                 """
-                parameters = (start_date,)
-            elif end_date:
+                parameters = (start_date_after,)
+            elif end_date_before:
                 query += """
                     WHERE
-                          DATE(EndDate) >= DATE(?)
+                          DATE(EndDate) <= DATE(?)
                 """
-                parameters = (end_date,)
+                parameters = (end_date_before,)
             else:
                 parameters = ()
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     pprint.pprint(
         list(map(dict, db.get_courses(
-            start_date='2019-01-01',
-            end_date='2019-01-23'
+            start_date_after='2019-01-01',
+            end_date_before='2019-01-23'
         )))
     )
