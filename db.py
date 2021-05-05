@@ -37,7 +37,7 @@ class Database:
                     Name        AS name,
                     StartDate   AS start,
                     EndDate     AS end,
-                    NumLectures AS num_lectures
+                    NumLectures AS lectures
                 FROM
                     courses
             """
