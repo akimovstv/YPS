@@ -143,8 +143,16 @@ class Database:
     def change_course_by_id(self, course_id: int):
         ...
 
-    def delete_course_by_id(self, course_id: int):
-        ...
+    def delete_course_by_id(
+            self,
+            *,
+            course_id: int
+    ):
+        with connect(self._path) as connection:
+            connection.execute(
+                """DELETE FROM courses WHERE CourseID = ?""",
+                (course_id,)
+            )
 
 
 database = Database('data.db')
