@@ -102,7 +102,7 @@ class Database:
             start_date: str,
             end_date: str,
             lectures: int
-    ):
+    ) -> Iterator[Row]:
         with connect(self._path) as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -140,14 +140,35 @@ class Database:
             ):
                 yield row
 
-    def change_course_by_id(self, course_id: int):
-        ...
+    def change_course_by_id(
+            self,
+            *,
+            course_id: int,
+            course_name: str,
+            start_date: str,
+            end_date: str,
+            lectures: int
+    ):
+        with connect(self._path) as connection:
+            connection.execute(
+                """
+                UPDATE courses
+                SET
+                    Name=?,
+                    StartDate=?,
+                    EndDate=?,
+                    NumLectures=?
+                WHERE
+                    CourseID = ?
+                """,
+                (course_name, start_date, end_date, lectures, course_id)
+            )
 
     def delete_course_by_id(
             self,
             *,
             course_id: int
-    ):
+    ) -> None:
         with connect(self._path) as connection:
             connection.execute(
                 """DELETE FROM courses WHERE CourseID = ?""",
