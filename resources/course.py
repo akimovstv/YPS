@@ -1,5 +1,5 @@
 """
-Handlers for `/course` and `/course/<int:course_id>`
+Handlers for `/course` and `/course/<int:course_id> resources`
 """
 from typing import Any, Dict, Tuple
 
@@ -11,9 +11,8 @@ from db import database
 
 class ExistedCourse(Resource):
     """
-    Resource that works with /course/<int:course_id>
+    Handler for `/course/<int:course_id>`
     """
-
     def get(self, course_id: int):
         return f'get course with id: {course_id}'
 
@@ -29,6 +28,9 @@ class ExistedCourse(Resource):
 
 
 class NewCourse(Resource):
+    """
+    Handler for `/course`
+    """
     parser = reqparse.RequestParser(bundle_errors=True)
     parser.add_argument('name', location='json', type=not_empty_name, required=True)
     parser.add_argument('start', location='json', type=checked_date, required=True)

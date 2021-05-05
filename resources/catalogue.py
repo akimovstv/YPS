@@ -1,3 +1,7 @@
+"""
+Handler for `/catalogue`
+"""
+
 from typing import Any, Dict, List
 
 from flask_restful import Resource, reqparse
@@ -7,6 +11,9 @@ from db import database
 
 
 class Catalogue(Resource):
+    """
+    Handler for `/catalogue`
+    """
     parser = reqparse.RequestParser(bundle_errors=True)
     parser.add_argument('course-name', location='args', type=not_empty_name)
     parser.add_argument('start-date-after', location='args', type=checked_date)
