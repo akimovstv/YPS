@@ -97,15 +97,48 @@ class Database:
 
     def insert_course(
             self,
-            name: str,
+            *,
+            course_name: str,
             start_date: str,
             end_date: str,
             lectures: int
     ):
-        ...
+        with connect(self._path) as connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                """
+                INSERT INTO
+                    courses (Name, StartDate, EndDate, NumLectures)
+                VALUES
+                    (?, ?, ?, ?)
+                """,
+                (course_name, start_date, end_date, lectures)
+            )
+            return self.get_course_by_id(course_id=cursor.lastrowid)
 
-    def get_course_by_id(self, course_id: int):
-        ...
+    def get_course_by_id(
+            self,
+            *,
+            course_id: int
+    ) -> Iterator[Row]:
+        with connect(self._path) as connection:
+            connection.row_factory = Row
+            for row in connection.execute(
+                    """
+                    SELECT
+                        CourseID    AS course_id,
+                        Name        AS name,
+                        StartDate   AS start,
+                        EndDate     AS end,
+                        NumLectures AS lectures
+                    FROM
+                        courses
+                    WHERE
+                        CourseID = ?;                
+                    """,
+                    (course_id,)
+            ):
+                yield row
 
     def change_course_by_id(self, course_id: int):
         ...
