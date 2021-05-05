@@ -5,7 +5,6 @@ from typing import Iterator, Optional
 class Database:
     def __init__(self, path: str) -> None:
         self._path = path
-        self.create_tables()
 
     def create_tables(self) -> None:
         with connect(self._path) as connection:
@@ -115,13 +114,4 @@ class Database:
         ...
 
 
-if __name__ == '__main__':
-    db = Database('first.db')
-    import pprint
-
-    pprint.pprint(
-        list(map(dict, db.get_courses(
-            start_date_after='2019-01-01',
-            end_date_before='2019-01-23'
-        )))
-    )
+database = Database('data.db')
