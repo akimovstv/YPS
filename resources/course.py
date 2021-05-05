@@ -1,4 +1,9 @@
-from flask_restful import Resource
+from typing import Any, Dict, Tuple
+
+from flask_restful import Resource, reqparse
+
+from checkers import checked_date, not_empty_name, non_negative_int
+from db import database
 
 
 class ExistedCourse(Resource):
@@ -17,8 +22,31 @@ class ExistedCourse(Resource):
 
 
 class NewCourse(Resource):
-    """
-    Resource that works with /course
-    """
-    def post(self):
-        return 'post new course'
+    parser = reqparse.RequestParser(bundle_errors=True)
+    parser.add_argument('name', location='json', type=not_empty_name, required=True)
+    parser.add_argument('start', location='json', type=checked_date, required=True)
+    parser.add_argument('end', location='json', type=checked_date, required=True)
+    parser.add_argument('lectures', location='json', type=non_negative_int, required=True)
+
+    def post(self) -> Tuple[Dict[str, Any], int]:
+        """
+        Insert a new course to database and return it as a response.
+        Example:
+        For `/course` with json payload {"name": "C#", "start": "2021-05-22", "end": "2022-07-31", "lectures": 23}
+        newly created course returns as json:
+        {
+            "course_id": 12,
+            "name": "C#",
+            "start": "2021-05-22",
+            "end": "2022-07-31",
+            "lectures": 23
+        }
+        """
+        data = self.parser.parse_args()
+        created_course = dict(next(database.insert_course(
+            course_name=data['name'],
+            start_date=data['start'],
+            end_date=data['end'],
+            lectures=data['lectures']
+        )))
+        return created_course, 201
