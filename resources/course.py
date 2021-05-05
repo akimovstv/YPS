@@ -1,7 +1,7 @@
 """
 Handlers for `/course` and `/course/<int:course_id> resources`
 """
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Union
 
 from flask_restful import Resource, reqparse
 
@@ -13,8 +13,16 @@ class ExistedCourse(Resource):
     """
     Handler for `/course/<int:course_id>`
     """
-    def get(self, course_id: int):
-        return f'get course with id: {course_id}'
+
+    def get(self, course_id: int) -> Union[Dict, Tuple[Dict, int]]:
+        """
+        Return course with provided `course_id`.
+        """
+        try:
+            course = dict(next(database.get_course_by_id(course_id=course_id)))
+            return course
+        except StopIteration:
+            return {'message': f'Course with id {course_id} not found'}, 404
 
     def patch(self, course_id: int):
         return f'patch course with id: {course_id}'
