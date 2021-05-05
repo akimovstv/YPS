@@ -2,15 +2,15 @@ from typing import Any, Dict, List
 
 from flask_restful import Resource, reqparse
 
-from checkers import checked_date, INVALID_DATE_MESSAGE, not_empty_name, INVALID_NAME_MESSAGE
+from checkers import checked_date, not_empty_name
 from db import database
 
 
 class Catalogue(Resource):
     parser = reqparse.RequestParser(bundle_errors=True)
-    parser.add_argument('course-name', location='args', type=not_empty_name, help=INVALID_NAME_MESSAGE)
-    parser.add_argument('start-date-after', location='args', type=checked_date, help=INVALID_DATE_MESSAGE)
-    parser.add_argument('end-date-before', location='args', type=checked_date, help=INVALID_DATE_MESSAGE)
+    parser.add_argument('course-name', location='args', type=not_empty_name)
+    parser.add_argument('start-date-after', location='args', type=checked_date)
+    parser.add_argument('end-date-before', location='args', type=checked_date)
 
     def get(self) -> List[Dict[str, Any]]:
         """
