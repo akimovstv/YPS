@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "f69fe52d-ed5f-40e0-81a2-db1416256066",
+		"name": "YPS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/catalogue",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/catalogue?course-name=C%23&start-date-after=2020-11-11&end-date-before=2022-12-30",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"catalogue"
+					],
+					"query": [
+						{
+							"key": "course-name",
+							"value": "C#"
+						},
+						{
+							"key": "start-date-after",
+							"value": "2020-11-11"
+						},
+						{
+							"key": "end-date-before",
+							"value": "2022-12-30"
+						}
+					]
+				},
+				"description": "Displaying the list of courses"
+			},
+			"response": []
+		},
+		{
+			"name": "/course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"C#\",\n    \"start\": \"2021-05-22\",\n    \"end\": \"2022-07-31\",\n    \"lectures\": 23 \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/course",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"course"
+					]
+				},
+				"description": "Displaying the list of courses"
+			},
+			"response": []
+		},
+		{
+			"name": "/course/<course_id>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/course/8",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"course",
+						"8"
+					]
+				},
+				"description": "Displaying the list of courses"
+			},
+			"response": []
+		},
+		{
+			"name": "/course/<course_id>",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Yalantis Python School\",    \n    \"start\": \"2021-12-12\",\n    \"end\": \"2025-07-31\",\n    \"lectures\": 1000 \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/course/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"course",
+						"4"
+					]
+				},
+				"description": "Displaying the list of courses"
+			},
+			"response": []
+		},
+		{
+			"name": "/course/<course_id>",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/course/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"course",
+						"4"
+					]
+				},
+				"description": "Displaying the list of courses"
+			},
+			"response": []
+		}
+	]
+}
