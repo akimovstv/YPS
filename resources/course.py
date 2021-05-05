@@ -13,6 +13,11 @@ class ExistedCourse(Resource):
     """
     Handler for `/course/<int:course_id>`
     """
+    parser = reqparse.RequestParser(bundle_errors=True)
+    parser.add_argument('name', location='json', type=not_empty_name)
+    parser.add_argument('start', location='json', type=checked_date)
+    parser.add_argument('end', location='json', type=checked_date)
+    parser.add_argument('lectures', location='json', type=non_negative_int)
 
     def get(self, course_id: int) -> Union[Dict, Tuple[Dict, int]]:
         """
@@ -24,8 +29,23 @@ class ExistedCourse(Resource):
         except StopIteration:
             return {'message': f'Course with id {course_id} not found'}, 404
 
-    def patch(self, course_id: int):
-        return f'patch course with id: {course_id}'
+    def patch(self, course_id: int) -> Union[Dict, Tuple[Dict, int]]:
+        """
+        Update fields in course with `course_id` with optional values from payload.
+        """
+        data = self.parser.parse_args()
+        try:
+            course = dict(next(database.get_course_by_id(course_id=course_id)))
+            database.change_course_by_id(
+                course_id=course_id,
+                course_name=data['name'] or course['name'],
+                start_date=data['start'] or course['start'],
+                end_date=data['end'] or course['end'],
+                lectures=data['lectures'] or course['lectures']
+            )
+            return {'message': f'Course with id {course_id} updated'}
+        except StopIteration:
+            return {'message': f'Course with id {course_id} not found'}, 404
 
     def delete(self, course_id: int) -> Dict[str, str]:
         """
