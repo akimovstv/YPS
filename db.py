@@ -96,6 +96,24 @@ class Database:
             for row in connection.execute(query, parameters):
                 yield row
 
+    def insert_course(
+            self,
+            name: str,
+            start_date: str,
+            end_date: str,
+            lectures: int
+    ):
+        ...
+
+    def get_course_by_id(self, course_id: int):
+        ...
+
+    def change_course_by_id(self, course_id: int):
+        ...
+
+    def delete_course_by_id(self, course_id: int):
+        ...
+
 
 if __name__ == '__main__':
     db = Database('first.db')
