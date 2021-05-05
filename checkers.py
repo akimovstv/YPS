@@ -26,3 +26,17 @@ def not_empty_name(s: str) -> str:
         return s
     else:
         raise ValueError('Must contain at least one non-blank character')
+
+
+def non_negative_int(s: str) -> int:
+    """
+    Return integer from `s`, if `s` represents non-negative integer,
+    otherwise raise ValueError.
+    """
+    try:
+        n = int(s)
+        if n < 0:
+            raise ValueError
+        return n
+    except ValueError:
+        raise ValueError('Must be non-negative integer')
